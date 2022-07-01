@@ -31,8 +31,8 @@ InlineKeyboardMarkup Open1 = new(new[]
                             // first row
                             new []
                             {
-                                InlineKeyboardButton.WithCallbackData(text: "в лево", callbackData: "Open1Left"),
-                                InlineKeyboardButton.WithCallbackData(text: "в право", callbackData: "Open1Right"),
+                                InlineKeyboardButton.WithCallbackData(text: "Влево", callbackData: "Open1Left"),
+                                InlineKeyboardButton.WithCallbackData(text: "Вправо", callbackData: "Open1Right"),
 
                             },
 
@@ -42,8 +42,8 @@ InlineKeyboardMarkup Open2 = new(new[]
                             // first row
                             new []
                             {
-                                InlineKeyboardButton.WithCallbackData(text: "в лево2", callbackData: "Open2Left"),
-                                InlineKeyboardButton.WithCallbackData(text: "в право2", callbackData: "Open2Right"),
+                                InlineKeyboardButton.WithCallbackData(text: "Влево", callbackData: "Open2Left"),
+                                InlineKeyboardButton.WithCallbackData(text: "Вправо", callbackData: "Open2Right"),
 
                             },
 
@@ -53,8 +53,8 @@ InlineKeyboardMarkup Open3 = new(new[]
                             // first row
                             new []
                             {
-                                InlineKeyboardButton.WithCallbackData(text: "в лево3", callbackData: "Open3Left"),
-                                InlineKeyboardButton.WithCallbackData(text: "в право3", callbackData: "Open3Right"),
+                                InlineKeyboardButton.WithCallbackData(text: "Меньшая", callbackData: "Open3Small"),
+                                InlineKeyboardButton.WithCallbackData(text: "Большая", callbackData: "Open3Big"),
 
                             },
 
