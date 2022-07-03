@@ -31,8 +31,8 @@ InlineKeyboardMarkup Open1 = new(new[]
                             // first row
                             new []
                             {
-                                InlineKeyboardButton.WithCallbackData(text: "в лево", callbackData: "Open1Left"),
-                                InlineKeyboardButton.WithCallbackData(text: "в право", callbackData: "Open1Right"),
+                                InlineKeyboardButton.WithCallbackData(text: "Влево", callbackData: "Open1Left"),
+                                InlineKeyboardButton.WithCallbackData(text: "Вправо", callbackData: "Open1Right"),
 
                             },
 
@@ -42,8 +42,8 @@ InlineKeyboardMarkup Open2 = new(new[]
                             // first row
                             new []
                             {
-                                InlineKeyboardButton.WithCallbackData(text: "в лево2", callbackData: "Open2Left"),
-                                InlineKeyboardButton.WithCallbackData(text: "в право2", callbackData: "Open2Right"),
+                                InlineKeyboardButton.WithCallbackData(text: "Влево", callbackData: "Open2Left"),
+                                InlineKeyboardButton.WithCallbackData(text: "Вправо", callbackData: "Open2Right"),
 
                             },
 
@@ -53,8 +53,8 @@ InlineKeyboardMarkup Open3 = new(new[]
                             // first row
                             new []
                             {
-                                InlineKeyboardButton.WithCallbackData(text: "в лево3", callbackData: "Open3Left"),
-                                InlineKeyboardButton.WithCallbackData(text: "в право3", callbackData: "Open3Right"),
+                                InlineKeyboardButton.WithCallbackData(text: "Меньшая", callbackData: "Open3Small"),
+                                InlineKeyboardButton.WithCallbackData(text: "Большая", callbackData: "Open3Big"),
 
                             },
 
@@ -82,10 +82,14 @@ botClient.StartReceiving(
 
 var me = await botClient.GetMeAsync();
 Console.WriteLine($"Start listening for @{me.Username}");
-
-Console.ReadLine();
-cts.Cancel();
-
+while (true)
+{
+    if (Console.ReadLine() == "Stop")
+    {
+        cts.Cancel();
+        break;
+    }
+}
 async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, CancellationToken cancellationToken)
 {
       
@@ -105,7 +109,7 @@ async Task HandleUpdateAsync(ITelegramBotClient botClient, Update update, Cancel
                 {
                     case "/start": var sentMessage = await botClient.SendTextMessageAsync(update.Message.Chat.Id, "Терминал №5571.\r\nДоступные вам команды:\r\n/control - текущее состояние гермоворот; \r\n /open - открытие гермоворот"); break;
                     case "/open": if (cooling | opened) {await botClient.SendTextMessageAsync(update.Message.Chat.Id, "Проверьте состояние гермоворот"); } 
-                        else { sentMessage = await botClient.SendPhotoAsync(update.Message.Chat.Id, "https://disk.yandex.ru/i/ROhpSCjRUmT6Qg", replyMarkup: Open1); _Id = sentMessage.MessageId; } break;
+                        else { sentMessage = await botClient.SendPhotoAsync(update.Message.Chat.Id, "https://disk.yandex.ru/i/DMVrrLVxXsjCQA", caption: "Необходимо определить, в какую сторону будет вращаться выделенная шестерёнка", replyMarkup: Open1); _Id = sentMessage.MessageId; } break;
 
                     case "/control": if (!(cooling|opened)) { sentMessage = await botClient.SendTextMessageAsync(update.Message.Chat.Id, "Состояние гермоворот стабильное"); } 
                      if (cooling) { sentMessage = await botClient.SendTextMessageAsync(update.Message.Chat.Id, "До стабильного состояния гермоворот: "+clock); };
@@ -138,17 +142,17 @@ async Task BotOnCallbackQueryReceived(ITelegramBotClient botClient, CallbackQuer
             case "Left":
                 await botClient.AnswerCallbackQueryAsync(
             callbackQueryId: callbackQuery.Id,
-            text: ""); if (buf) { buf = false; };
+            text: ""); if (buf) { buf = true; };
                 break;
             case "Right":
                 await botClient.AnswerCallbackQueryAsync(
             callbackQueryId: callbackQuery.Id,
-            text: ""); if (buf) { buf = true; };
+            text: ""); if (buf) { buf = false; };
                 break;
             default: break;
         }
         await botClient.DeleteMessageAsync(callbackQuery.Message.Chat.Id, _Id);
-        var beb = await botClient.SendPhotoAsync(callbackQuery.Message.Chat.Id,"https://disk.yandex.ru/i/eP7RQ_DI5TdWoQ", replyMarkup: Open2);
+        var beb = await botClient.SendPhotoAsync(callbackQuery.Message.Chat.Id, "https://disk.yandex.ru/i/xqyqars4FSyHiw",caption: "Необходимо определить, в какую сторону будет вращаться выделенная шестерёнка", replyMarkup: Open2);
         _Id2 = beb.MessageId;
     }
     if (callbackQuery.Data.StartsWith("Open2"))
@@ -168,18 +172,18 @@ async Task BotOnCallbackQueryReceived(ITelegramBotClient botClient, CallbackQuer
             default: break;
         }
         await botClient.DeleteMessageAsync(callbackQuery.Message.Chat.Id, _Id2);
-        var beb = await botClient.SendPhotoAsync(callbackQuery.Message.Chat.Id, "https://disk.yandex.ru/i/8k2uscXAX1Umjg", replyMarkup: Open3);
+        var beb = await botClient.SendPhotoAsync(callbackQuery.Message.Chat.Id, "https://disk.yandex.ru/i/ycGxz1JkK0PgKg",caption: "Необходимо выбрать зубчатую передачу, которая обеспечит оси, прикреплённой к выделенной шестерёнке, максимальную скорость вращения", replyMarkup: Open3);
         _Id3 = beb.MessageId;
     }
     if (callbackQuery.Data.StartsWith("Open3"))
     {
         switch (callbackQuery.Data.Substring(5))
         {
-            case "Left":
-                 if (buf) { buf = false; };
-                break;
-            case "Right":
+            case "Small":
                  if (buf) { buf = true; };
+                break;
+            case "Big":
+                 if (buf) { buf = false; };
                 break;
             default: break;
         }
